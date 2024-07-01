@@ -2,7 +2,7 @@
 #
 #
 # 1: Get the cities with a name starting with ping sorted by their population with the least populated cities first
-#SELECT Name, Population FROM world.city ORDER BY Population ASC;
+SELECT Name, Population FROM world.city ORDER BY Population ASC;
 #
 # 2: Get the cities with a name starting with ran sorted by their population with the most populated cities first
 #SELECT Name, Population FROM world.city ORDER BY  Population DESC;
@@ -49,16 +49,28 @@
 #SELECT CountryCode FROM world.city WHERE Population = 122199);
 #
 # 16: What names of the cities are in the same country as the city with a population of 122199 (excluding the that city itself)
-#
+#SELECT Name 
+#FROM world.city 
+#WHERE CountryCode = 
+#(SELECT CountryCode FROM world.city WHERE Population = 122199) AND Population != 122199;
 #
 # 17: What are the city names in the country where Luanda is capital?
-#
+#SELECT c.Name 
+#FROM world.city c
+#WHERE c.CountryCode = 
+#(SELECT co.Code FROM world.country co WHERE co.Capital = (SELECT ci.ID FROM world.city ci WHERE ci.Name = 'Luanda'));
 #
 # 18: What are the names of the capital cities in countries in the same region as the city named Yaren
-#
+#SELECT ci.Name AS CapitalCity
+#FROM world.city ci
+#JOIN world.country co ON ci.ID = co.Capital
+#WHERE co.Region = (SELECT Region FROM world.country WHERE Code = (SELECT CountryCode FROM world.city WHERE Name = 'Yaren'));
 #
 # 19: What unique languages are spoken in the countries in the same region as the city named Riga
-#
+#SELECT DISTINCT cl.Language
+#FROM world.countrylanguage cl
+#JOIN world.country co ON cl.CountryCode = co.Code
+#WHERE co.Region = (SELECT Region FROM world.country WHERE Code = (SELECT CountryCode FROM world.city WHERE Name = 'Riga'));
 #
 # 20: Get the name of the most populous city
 #SELECT Name, Population FROM world.city ORDER BY Population DESC LIMIT 1;
